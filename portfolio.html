@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minka Nagy</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <style>
+:root {
+    --primary: #18181B;
+    --secondary: #1F1F23;
+    --accent: #60A5FA;
+    --accent-light: #93C5FD;
+    --text-primary: #E4E4E7;
+    --text-secondary: #A1A1AA;
+    --background: #0F0F11;
+    --card-bg: #18181B;
+    --border: rgba(255, 255, 255, 0.06);
+}
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--background);
+            color: var(--text-primary);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* Header flotante */
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 2rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            background: linear-gradient(180deg, rgba(10, 14, 19, 0.95) 0%, transparent 100%);
+            backdrop-filter: blur(10px);
+        }
+
+        .logo {
+            font-family: 'Inter', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            color: var(--text-primary);
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        .logo.visible {
+            opacity: 1;
+        }
+
+        nav ul {
+            display: flex;
+            gap: 3rem;
+            list-style: none;
+        }
+
+        nav a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: color 0.3s ease;
+            position: relative;
+        }
+
+        nav a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 1px;
+            background: var(--text-primary);
+            transition: width 0.3s ease;
+        }
+
+        nav a:hover {
+            color: var(--text-primary);
+        }
+
+        nav a:hover::after {
+            width: 100%;
+        }
+
+        /* ─── HERO ─── */
+        .hero-wrapper {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .hero-greeting {
+            font-size: clamp(2.5rem, 7vw, 6rem);
+            font-weight: 700;
+            letter-spacing: -2px;
+            color: var(--text-primary);
+            white-space: nowrap;
+            animation: fadeInUp 1s ease-out;
+            display: block;
+            margin-bottom: 1rem;
+        }
+
+        .hero-sub {
+            font-size: clamp(0.9rem, 1.5vw, 1.1rem);
+            color: var(--text-secondary);
+            font-weight: 400;
+            letter-spacing: 0.02em;
+            animation: fadeInUp 1s ease-out 0.3s backwards;
+            display: block;
+            text-align: center;
+        }
+
+        /* Down arrow */
+        .hero-arrow {
+            position: absolute;
+            bottom: 3rem;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            align-items: center;
+            opacity: 0.4;
+            cursor: pointer;
+            animation: arrowBounce 2s ease-in-out infinite;
+            background: none;
+            border: none;
+            padding: 0;
+        }
+
+        .hero-arrow svg {
+            width: 28px;
+            height: 28px;
+            stroke: var(--text-primary);
+            fill: none;
+            stroke-width: 1.5;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        @keyframes arrowBounce {
+            0%, 100% { transform: translateX(-50%) translateY(0); }
+            50% { transform: translateX(-50%) translateY(8px); }
+        }
+
+        /* Secciones */
+        section {
+            padding: 8rem 5%;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            margin-bottom: 5rem;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease;
+        }
+
+        .section-header.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .section-tag {
+            font-size: 0.9rem;
+            color: var(--accent);
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        .section-title {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 900;
+            margin-bottom: 1.5rem;
+            letter-spacing: -1px;
+        }
+
+        .section-description {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            max-width: 700px;
+        }
+
+        /* Grid de proyectos */
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2.5rem;
+        }
+
+        .project-card {
+            background: var(--card-bg);
+            border-radius: 20px;
+            overflow: hidden;
+            transition: all 0.4s ease;
+            border: 1px solid var(--border);
+            opacity: 0;
+            transform: translateY(30px);
+            cursor: pointer;
+        }
+
+        .project-card.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .project-card:hover {
+            transform: translateY(-10px);
+            border-color: rgba(255,255,255,0.15);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+        }
+
+        .project-image {
+            width: 100%;
+            height: 200px;
+            background: linear-gradient(135deg, var(--secondary) 0%, var(--primary) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            color: var(--text-secondary);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .project-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .project-content {
+            padding: 2rem;
+        }
+
+        .project-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .project-description {
+            color: var(--text-secondary);
+            margin-bottom: 1.5rem;
+            font-size: 0.95rem;
+            line-height: 1.7;
+        }
+
+        .project-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .tag {
+            padding: 0.4rem 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        .project-status {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            z-index: 2;
+            backdrop-filter: blur(10px);
+        }
+
+        .status-finished {
+            background: rgba(34, 197, 94, 0.2);
+            border: 1px solid rgba(34, 197, 94, 0.4);
+            color: #4ade80;
+        }
+
+        .status-progress {
+            background: rgba(234,179,8,0.15);
+            border: 1px solid rgba(234,179,8,0.35);
+            color: #fbbf24;
+        }
+
+        .status-soon {
+            background: rgba(31, 1, 36, 0.2);
+            border: 1px solid rgba(234, 8, 211, 0.4);
+            color: #991ff6;
+        }
+
+        /* Sección de contacto */
+        .contact {
+            background: linear-gradient(135deg, var(--secondary) 0%, var(--primary) 100%);
+            border-radius: 30px;
+            padding: 5rem;
+            text-align: center;
+            border: 1px solid var(--border);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .contact-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .contact h2 {
+            font-size: clamp(2rem, 4vw, 3.5rem);
+            margin-bottom: 1.5rem;
+            font-weight: 900;
+        }
+
+        .contact p {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            margin-bottom: 2.5rem;
+        }
+
+        .contact-links {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 1rem 2.5rem;
+            border: none;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .btn-primary {
+            background: var(--text-primary);
+            color: var(--background);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            background: #fff;
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--text-primary);
+            border: 1px solid var(--border);
+        }
+
+        .btn-secondary:hover {
+            border-color: rgba(255,255,255,0.2);
+            background: rgba(255,255,255,0.05);
+        }
+
+        /* Footer */
+        footer {
+            padding: 3rem 5%;
+            text-align: center;
+            color: var(--text-secondary);
+            border-top: 1px solid var(--border);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            header {
+                padding: 1.5rem 5%;
+            }
+
+            nav ul {
+                gap: 1.5rem;
+            }
+
+            section {
+                padding: 5rem 5%;
+            }
+
+            .projects-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .contact {
+                padding: 3rem 2rem;
+            }
+        }
+
+        /* Scroll reveal animation */
+        [data-scroll] {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease;
+        }
+
+        [data-scroll].visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="logo" id="headerLogo">Minka Nagy</div>
+        <nav>
+            <ul>
+                <li><a href="#figma">Designs</a></li>
+                <li><a href="#projects">Projects</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <div class="hero-wrapper" id="heroWrapper">
+        <div style="text-align: center;">
+            <span class="hero-greeting">Hi, I'm Minka</span>
+            <span class="hero-sub">Nice to meet you, thanks for stopping by :)</span>
+        </div>
+
+        <!-- Down arrow -->
+        <button class="hero-arrow" id="heroArrow" aria-label="Scroll to projects">
+            <svg viewBox="0 0 24 24">
+                <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+        </button>
+    </div>
+
+    <!-- Sección Figma -->
+    <section id="figma">
+        <div class="section-header" data-scroll>
+            <span class="section-tag">UI/UX Design</span>
+            <h2 class="section-title">Figma Projects</h2>
+        </div>
+        <div class="projects-grid">
+
+            <a href="destined.html" style="text-decoration: none; color: inherit;">
+                <div class="project-card" data-scroll style="transition-delay: 0.1s">
+                    <div class="project-image" style="background: white;">
+                        <img src="images/destinlogo.png" alt="Destin" style="object-fit: contain; padding: 2rem;">
+                    </div>
+                    <div class="project-content">
+                        <h3 class="project-title">Destin</h3>
+                        <p class="project-description">Location-based social app for discovering local experiences through your friends' recommendations.</p>
+                        <div class="project-tags">
+                            <span class="tag">iOS App</span>
+                            <span class="tag">UI/UX</span>
+                        </div>
+                    </div>
+                </div>
+            </a>
+
+            <a href="gamesforus.html" style="text-decoration: none; color: inherit;">
+                <div class="project-card" data-scroll style="transition-delay: 0.2s">
+                    <div class="project-image" style="background: #1a1a1a;">
+                        <img src="images/gamesforus-logo.png" alt="GamesForUs" style="object-fit: contain; padding: 2rem;">
+                    </div>
+                    <div class="project-content">
+                        <h3 class="project-title">GamesForUs</h3>
+                        <p class="project-description">Multiplayer mobile gaming app featuring Hangman, Battleship, and Crossword with global matchmaking and friend challenges.</p>
+                        <div class="project-tags">
+                            <span class="tag">iOS App</span>
+                            <span class="tag">UI/UX</span>
+                        </div>
+                    </div>
+                </div>
+            </a>
+
+        </div>
+    </section>
+
+<!-- Sección Proyectos -->
+    <section id="projects">
+        <div class="section-header" data-scroll>
+            <span class="section-tag">Development</span>
+            <h2 class="section-title">Full-stack Projects</h2>
+        </div>
+        <div class="projects-grid">
+            <a href="tutorlinked.html" style="text-decoration: none; color: inherit; display: contents;">
+                <div class="project-card" data-scroll style="transition-delay: 0.1s">
+                    <span class="project-status status-finished">Completed</span>
+                    <div class="project-image">
+                        <img src="images/tutorlinked.png" alt="TutorLinked Dashboard" style="width: 100%; height: 100%; object-fit: cover; object-position: center top;">
+                    </div>
+                    <div class="project-content">
+                        <h3 class="project-title">TutorLinked</h3>
+                        <p class="project-description">Full-stack peer-to-peer tutoring marketplace for UC Berkeley students. Features real-time messaging, Stripe payment processing, dual-role system, and automated session booking with conflict detection.</p>
+                        <div class="project-tags">
+                            <span class="tag">React</span>
+                            <span class="tag">Node.js</span>
+                            <span class="tag">MongoDB</span>
+                            <span class="tag">Socket.io</span>
+                            <span class="tag">Stripe</span>
+                        </div>
+                    </div>
+                </div>
+            </a>
+            <a href="destin-app.html" style="text-decoration: none; color: inherit; display: contents;">
+                <div class="project-card" data-scroll style="transition-delay: 0.2s">
+                    <span class="project-status status-progress">In Progress</span>
+                    <div class="project-image" style="position: relative;">
+    <img src="images/destin-cover.png" alt="Destin App" style="width: 100%; height: 100%; object-fit: cover; object-position: center top;">
+    <div style="position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(0,0,0,0.35) 0%, rgba(0,0,0,0.1) 100%);"></div>
+</div>
+                    <div class="project-content">
+                        <h3 class="project-title">Destin</h3>
+                        <p class="project-description">Location-based social app for discovering places through your friends' recommendations, not algorithms.</p>
+                        <div class="project-tags">
+                            <span class="tag">React Native</span>
+                            <span class="tag">Node.js</span>
+                            <span class="tag">Supabase</span>
+                            <span class="tag">Mapbox</span>
+                        </div>
+                    </div>
+                </div>
+            </a>
+            <a href="gamesforus-dev.html" style="text-decoration: none; color: inherit; display: contents;">
+                <div class="project-card" data-scroll style="transition-delay: 0.3s">
+                    <span class="project-status status-soon">Coming Soon</span>
+                    <div class="project-image">⏱️</div>
+                    <div class="project-content">
+                        <h3 class="project-title">GamesForUs</h3>
+                        <p class="project-description">iOS app for creating and playing custom games with friends. Initial games will include hangman, battleship and crossword.</p>
+                        <div class="project-tags">
+                            <span class="tag">React Native</span>
+                            <span class="tag">Node.js</span>
+                            <span class="tag">Socket.io</span>
+                            <span class="tag">Supabase</span>
+                        </div>
+                    </div>
+                </div>
+            </a>
+        </div>
+    </section>
+    <!-- Contacto -->
+    <section id="contact">
+        <div class="contact" data-scroll>
+            <div class="contact-content">
+                <h2>Let's Work Together!</h2>
+                <p>Feel free to reach out to me about freelance projects or job opportunities!</p>
+                <div class="contact-links">
+                    <a href="mailto:minka.e.nagy@gmail.com" class="btn btn-primary">Send Email</a>
+                    <a href="https://linkedin.com/in/minka-nagy" target="_blank" class="btn btn-secondary">LinkedIn</a>
+                    <a href="https://github.com/minkanagy" target="_blank" class="btn btn-secondary">GitHub</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2026 Minka Nagy</p>
+    </footer>
+
+    <script>
+        const figmaSection = document.getElementById('figma');
+        const heroArrow = document.getElementById('heroArrow');
+        const heroWrapper = document.getElementById('heroWrapper');
+        const logo = document.querySelector('.logo');
+        let hasScrolled = false;
+
+        function scrollToFigma() {
+            if (hasScrolled) return;
+            hasScrolled = true;
+            figmaSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        heroArrow.addEventListener('click', scrollToFigma);
+        window.addEventListener('wheel', scrollToFigma, { passive: true, once: true });
+        window.addEventListener('touchmove', scrollToFigma, { passive: true, once: true });
+
+        // Show/hide logo based on whether we've scrolled past the hero
+        window.addEventListener('scroll', () => {
+            const heroBottom = heroWrapper.getBoundingClientRect().bottom;
+            if (heroBottom <= 0) {
+                logo.classList.add('visible');
+            } else {
+                logo.classList.remove('visible');
+            }
+        }, { passive: true });
+
+        // Scroll reveal for sections
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -100px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('[data-scroll]').forEach((el) => {
+            observer.observe(el);
+        });
+
+        document.querySelectorAll('.project-card').forEach((el) => {
+            observer.observe(el);
+        });
+
+        // Smooth scroll for nav links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+
+        // Hover on cards
+        document.querySelectorAll('.project-card').forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-10px)';
+            });
+            card.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0)';
+            });
+        });
+    </script>
+</body>
+</html>

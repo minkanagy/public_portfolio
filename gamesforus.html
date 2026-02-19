@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GamesForUs - Minka Nagy</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: #0a0a0a;
+            color: #e0e0e0;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        /* Header */
+        header {
+            padding: 30px 0 60px;
+        }
+
+        .back-link {
+            color: #888;
+            text-decoration: none;
+            font-size: 14px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 40px;
+            transition: color 0.3s;
+        }
+
+        .back-link:hover {
+            color: #fff;
+        }
+
+        h1 {
+            font-size: 48px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, #00c6ff 0%, #7b2ff7 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .project-meta {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .tag {
+            background: rgba(0, 198, 255, 0.08);
+            border: 1px solid rgba(0, 198, 255, 0.25);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 13px;
+            color: #00c6ff;
+        }
+
+        .description {
+            font-size: 18px;
+            color: #b0b0b0;
+            max-width: 800px;
+            margin-bottom: 60px;
+            line-height: 1.8;
+        }
+
+        /* Gallery */
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 24px;
+            margin-bottom: 80px;
+        }
+
+        .gallery-item {
+            background: #1a1a1a;
+            border-radius: 16px;
+            overflow: hidden;
+            border: 1px solid #2a2a2a;
+            transition: transform 0.3s, border-color 0.3s;
+            cursor: pointer;
+        }
+
+        .gallery-item:hover {
+            transform: translateY(-5px);
+            border-color: #00c6ff;
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 420px;
+            display: block;
+            object-fit: cover;
+            object-position: top;
+        }
+
+        .gallery-item-title {
+            padding: 16px 20px;
+            font-size: 14px;
+            color: #c0c0c0;
+        }
+
+        /* Section headings */
+        .section-title {
+            font-size: 28px;
+            font-weight: 600;
+            color: #fff;
+            margin-bottom: 30px;
+        }
+
+        /* Project Details */
+        .project-details {
+            background: #1a1a1a;
+            border: 1px solid #2a2a2a;
+            border-radius: 16px;
+            padding: 40px;
+            margin-bottom: 60px;
+        }
+
+        .project-details h2 {
+            font-size: 24px;
+            margin-bottom: 20px;
+            color: #fff;
+        }
+
+        .project-details p {
+            color: #b0b0b0;
+            margin-bottom: 15px;
+        }
+
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .feature-item {
+            padding: 20px;
+            background: rgba(0, 198, 255, 0.04);
+            border-radius: 10px;
+            border-left: 3px solid #00c6ff;
+        }
+
+        .feature-item h3 {
+            font-size: 16px;
+            margin-bottom: 8px;
+            color: #fff;
+        }
+
+        .feature-item p {
+            font-size: 14px;
+            color: #888;
+            margin: 0;
+        }
+
+        .game-screens .gallery-item img {
+            height: 420px;
+            object-fit: cover;
+            object-position: top;
+        }
+
+        .game-block {
+            margin-bottom: 60px;
+        }
+
+        .game-block-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .game-icon {
+            width: 52px;
+            height: 52px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            flex-shrink: 0;
+        }
+
+        .game-icon.hangman { background: linear-gradient(135deg, #1c7ed6, #339af0); }
+        .game-icon.battleship { background: linear-gradient(135deg, #c0392b, #e74c3c); }
+        .game-icon.crossword { background: linear-gradient(135deg, #7b2ff7, #e040fb); }
+
+        .game-block-header h3 {
+            font-size: 22px;
+            font-weight: 600;
+            color: #fff;
+        }
+
+        .game-block-header p {
+            font-size: 14px;
+            color: #888;
+            margin: 0;
+        }
+
+        .game-screens {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 20px;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            max-width: 420px;
+            width: 100%;
+            max-height: 90vh;
+            object-fit: contain;
+            border-radius: 20px;
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            color: #fff;
+            font-size: 40px;
+            font-weight: 300;
+            cursor: pointer;
+            transition: color 0.3s;
+            line-height: 1;
+        }
+
+        .close-modal:hover {
+            color: #00c6ff;
+        }
+
+        /* Design system */
+        .color-swatch {
+            width: 100px;
+            height: 90px;
+            border-radius: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            font-weight: 600;
+            text-align: center;
+            gap: 4px;
+        }
+
+        @media (max-width: 768px) {
+            h1 { font-size: 32px; }
+            .gallery { grid-template-columns: repeat(2, 1fr); }
+            .game-screens { grid-template-columns: repeat(2, 1fr); }
+            .project-details { padding: 25px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <a href="portfolio.html#figma" class="back-link">← Back to Portfolio</a>
+            <h1>GamesForUs</h1>
+            <div class="project-meta">
+                <span class="tag">Mobile App</span>
+                <span class="tag">iOS Design</span>
+                <span class="tag">UI/UX</span>
+                <span class="tag">Figma</span>
+                <span class="tag">Multiplayer</span>
+            </div>
+            <p class="description">
+                A multiplayer mobile app that brings classic games like Hangman, Battleship, and Crossword to your screen. Send challenges to friends or play with players around the globe. 
+                </p>
+                Designed for iOS using Figma.
+                </p>
+                
+            </p>
+        </header>
+
+        <!-- About -->
+        <section class="project-details">
+            <h2>About the Project</h2>
+            <p>
+                GamesForUs is for players who love classic games and want to play them with friends in a modern, competitive environment.
+            </p>
+            <div class="features">
+                <div class="feature-item">
+                    <h3>🌐 Global Matchmaking</h3>
+                    <p>Skill-based matching with live players around the globe</p>
+                </div>
+                <div class="feature-item">
+                    <h3>👥 Friend Challenges</h3>
+                    <p>Make your own puzzles and challenge friends to solve them</p>
+                </div>
+                <div class="feature-item">
+                    <h3>🏆 Leaderboards</h3>
+                    <p>Rankings with win rates, streaks, and ranks</p>
+                </div>
+                <div class="feature-item">
+                    <h3>📊 Player Profiles</h3>
+                    <p>Per-game stats, win rates, and global rank tracking</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Game Breakdowns -->
+        <div class="games-section">
+            <h2 class="section-title">Game Flows</h2>
+
+            <!-- Hangman -->
+            <div class="game-block">
+                <div class="game-block-header">
+                    <div class="game-icon hangman">🔠</div>
+                    <div>
+                        <h3>Hangman</h3>
+                        <p>The beloved game, brought to your screen</p>
+                    </div>
+                </div>
+                <div class="game-screens">
+                    <div class="gallery-item" onclick="openModal(this)">
+                        <img src="images/gfu-global-play.png" alt="Global Play">
+                        <div class="gallery-item-title">Select Game & Online Count</div>
+                    </div>
+                    <div class="gallery-item" onclick="openModal(this)">
+                        <img src="images/gfu-create-challenge.png" alt="Create Challenge">
+                        <div class="gallery-item-title">Create Challenge</div>
+                    </div>
+                    <div class="gallery-item" onclick="openModal(this)">
+                        <img src="images/gfu-hangman-correct.png" alt="Correct Guess">
+                        <div class="gallery-item-title">Correct Guess</div>
+                    </div>
+                    <div class="gallery-item" onclick="openModal(this)">
+                        <img src="images/gfu-hangman-warning.png" alt="Last Chance Warning">
+                        <div class="gallery-item-title">Last Chance Warning</div>
+                    </div>
+                    <div class="gallery-item" onclick="openModal(this)">
+                        <img src="images/gfu-hangman-win.png" alt="Victory">
+                        <div class="gallery-item-title">Victory Screen</div>
+                    </div>
+                    <div class="gallery-item" onclick="openModal(this)">
+                        <img src="images/gfu-hangman-lose.png" alt="Defeated">
+                        <div class="gallery-item-title">Defeated Screen</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Battleship -->
+            <div class="game-block">
+                <div class="game-block-header">
+                    <div class="game-icon battleship">⚓</div>
+                    <div>
+                        <h3>Battleship</h3>
+                        <p>Place your fleet on an 8×8 grid and take turns firing at your opponent's board</p>
+                    </div>
+                </div>
+                <div class="game-screens">
+                    <div class="gallery-item" onclick="openModal(this)">
+                        <img src="images/gfu-battleship-setup.png" alt="Setup">
+                        <div class="gallery-item-title">Grid Setup</div>
+                    </div>
+                    <div class="gallery-item" onclick="openModal(this)">
+                        <img src="images/gfu-ship-selection.png" alt="Ships">
+                        <div class="gallery-item-title">Choose Ships</div>
+                    </div>
+                    <div class="gallery-item" onclick="openModal(this)">
+                        <img src="images/gfu-ships-placed.png" alt="Start">
+                        <div class="gallery-item-title">Ready to Battle</div>
+                    </div>
+                    <div class="gallery-item" onclick="openModal(this)">
+                        <img src="images/gfu-battle-start.png" alt="In Progress">
+                        <div class="gallery-item-title">Battle In Progress</div>
+                    </div>
+                    <div class="gallery-item" onclick="openModal(this)">
+                        <img src="images/gfu-battle-moves.png" alt="Moves">
+                        <div class="gallery-item-title">Hits & Misses</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Crossword -->
+            <div class="game-block">
+                <div class="game-block-header">
+                    <div class="game-icon crossword">🟪</div>
+                    <div>
+                        <h3>Crossword</h3>
+                        <p>Daily puzzles in solo or co-op mode — race friends and track your best times</p>
+                    </div>
+                </div>
+                <div class="game-screens">
+                    <div class="gallery-item" onclick="openModal(this)">
+                        <img src="images/gfu-crossword.png" alt="Crossword">
+                        <div class="gallery-item-title">Daily Crossword</div>
+                    </div>
+                    <div class="gallery-item" onclick="openModal(this)">
+                        <img src="images/gfu-crossword-game.png" alt="Crossword In Progress">
+                        <div class="gallery-item-title">Puzzle In Progress</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- All Screens Overview -->
+        <h2 class="section-title">All Screens</h2>
+        <div class="gallery">
+            <div class="gallery-item" onclick="openModal(this)">
+                <img src="images/gfu-home.png" alt="Home Screen">
+                <div class="gallery-item-title">Home Dashboard</div>
+            </div>
+            <div class="gallery-item" onclick="openModal(this)">
+                <img src="images/gfu-global-play.png" alt="Global Play">
+                <div class="gallery-item-title">Global Play</div>
+            </div>
+            <div class="gallery-item" onclick="openModal(this)">
+                <img src="images/gfu-connections-all.png" alt="Connections">
+                <div class="gallery-item-title">Connections – All</div>
+            </div>
+            <div class="gallery-item" onclick="openModal(this)">
+                <img src="images/gfu-connections-online.png" alt="Connections Online">
+                <div class="gallery-item-title">Connections – Online</div>
+            </div>
+            <div class="gallery-item" onclick="openModal(this)">
+                <img src="images/gfu-create-challenge.png" alt="Create Challenge">
+                <div class="gallery-item-title">Create Challenge – Hangman</div>
+            </div>
+            <div class="gallery-item" onclick="openModal(this)">
+                <img src="images/gfu-battleship-setup.png" alt="Battleship Setup">
+                <div class="gallery-item-title">Battleship Setup</div>
+            </div>
+            <div class="gallery-item" onclick="openModal(this)">
+                <img src="images/gfu-ship-selection.png" alt="Ship Selection">
+                <div class="gallery-item-title">Ship Selection</div>
+            </div>
+            <div class="gallery-item" onclick="openModal(this)">
+                <img src="images/gfu-ships-placed.png" alt="Ships Placed">
+                <div class="gallery-item-title">Ships Placed – Start Battle</div>
+            </div>
+            <div class="gallery-item" onclick="openModal(this)">
+                <img src="images/gfu-battle-start.png" alt="Battle In Progress">
+                <div class="gallery-item-title">Battle In Progress</div>
+            </div>
+            <div class="gallery-item" onclick="openModal(this)">
+                <img src="images/gfu-battle-moves.png" alt="Battle with Moves">
+                <div class="gallery-item-title">Battle – Moves Made</div>
+            </div>
+            <div class="gallery-item" onclick="openModal(this)">
+                <img src="images/gfu-crossword.png" alt="Daily Crossword">
+                <div class="gallery-item-title">Daily Crossword</div>
+            </div>
+            <div class="gallery-item" onclick="openModal(this)">
+                <img src="images/gfu-crossword-game.png" alt="Crossword Puzzle">
+                <div class="gallery-item-title">Crossword – In Progress</div>
+            </div>
+            <div class="gallery-item" onclick="openModal(this)">
+                <img src="images/gfu-profile.png" alt="Profile">
+                <div class="gallery-item-title">Player Profile</div>
+            </div>
+            <div class="gallery-item" onclick="openModal(this)">
+                <img src="images/gfu-leaderboard-global.png" alt="Leaderboard Global">
+                <div class="gallery-item-title">Leaderboard – Global</div>
+            </div>
+            <div class="gallery-item" onclick="openModal(this)">
+                <img src="images/gfu-leaderboard-friends.png" alt="Leaderboard Friends">
+                <div class="gallery-item-title">Leaderboard – Friends</div>
+            </div>
+            <div class="gallery-item" onclick="openModal(this)">
+                <img src="images/gfu-hangman-correct.png" alt="Hangman Correct">
+                <div class="gallery-item-title">Hangman – Correct Guess</div>
+            </div>
+            <div class="gallery-item" onclick="openModal(this)">
+                <img src="images/gfu-hangman-warning.png" alt="Hangman Warning">
+                <div class="gallery-item-title">Hangman – Last Chance</div>
+            </div>
+            <div class="gallery-item" onclick="openModal(this)">
+                <img src="images/gfu-hangman-win.png" alt="Hangman Win">
+                <div class="gallery-item-title">Hangman – Victory</div>
+            </div>
+            <div class="gallery-item" onclick="openModal(this)">
+                <img src="images/gfu-hangman-lose.png" alt="Hangman Lose">
+                <div class="gallery-item-title">Hangman – Defeated</div>
+            </div>
+        </div>
+        </div>
+
+        <!-- Design System -->
+        <section class="project-details">
+            <h2>Design System</h2>
+            <p><strong>Color Palette:</strong></p>
+            <div style="display: flex; gap: 15px; margin: 20px 0; flex-wrap: wrap;">
+                <div class="color-swatch" style="background: #0d1b2a; border: 1px solid #2a2a2a; color: #888;">#0D1B2A<br>Background</div>
+                <div class="color-swatch" style="background: #00c6ff; color: #003a50;">#00C6FF<br>Cyan Accent</div>
+                <div class="color-swatch" style="background: linear-gradient(135deg, #00c6ff, #7b2ff7); color: #fff;">Blue → Purple<br>Gradient</div>
+                <div class="color-swatch" style="background: #e74c3c; color: #fff;">#E74C3C<br>Battleship Red</div>
+                <div class="color-swatch" style="background: linear-gradient(135deg, #f6a700, #e74c3c); color: #fff;">Orange<br>Leaderboard</div>
+                <div class="color-swatch" style="background: linear-gradient(135deg, #7b2ff7, #e040fb); color: #fff;">Purple → Pink<br>Crossword</div>
+            </div>
+
+            <p style="margin-top: 20px;"><strong>Typography:</strong></p>
+            <p>Primary Font: System default (SF Pro / Inter)<br>
+            Weights: Regular (400), Semibold (600), Bold (700)<br>
+            Navigation titles bold, subtitles in gray (#888)</p>
+
+            <p style="margin-top: 15px;"><strong>Layout:</strong></p>
+            <p>Mobile-first at 375×812px (iPhone)<br>
+            Dark navy base (#0D1B2A) with layered card surfaces (#1a1f2e)<br>
+            16px border radius on cards, 14px on game icons<br>
+            Cyan (#00C6FF) used consistently for interactive/nav elements</p>
+
+            <p style="margin-top: 15px;"><strong>Game Color Coding:</strong></p>
+            <p>Hangman → Blue gradient · Battleship → Red · Crossword → Purple-pink gradient · Leaderboard → Orange-gold</p>
+        </section>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal" id="imageModal" onclick="closeModal()">
+        <span class="close-modal">&times;</span>
+        <img class="modal-content" id="modalImage">
+    </div>
+
+    <script>
+        function openModal(element) {
+            const img = element.querySelector('img');
+            if (img) {
+                document.getElementById('imageModal').classList.add('active');
+                document.getElementById('modalImage').src = img.src;
+            }
+        }
+
+        function closeModal() {
+            document.getElementById('imageModal').classList.remove('active');
+        }
+
+        document.addEventListener('keydown', e => {
+            if (e.key === 'Escape') closeModal();
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Destin - Minka Nagy</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: #0a0a0a;
+            color: #e0e0e0;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        /* Header */
+        header {
+            padding: 30px 0 60px;
+        }
+
+        .back-link {
+            color: #888;
+            text-decoration: none;
+            font-size: 14px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 40px;
+            transition: color 0.3s;
+        }
+
+        .back-link:hover {
+            color: #fff;
+        }
+
+        h1 {
+            font-size: 48px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .project-meta {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .tag {
+            background: rgba(102, 126, 234, 0.1);
+            border: 1px solid rgba(102, 126, 234, 0.3);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 13px;
+            color: #667eea;
+        }
+
+        .description {
+            font-size: 18px;
+            color: #b0b0b0;
+            max-width: 800px;
+            margin-bottom: 60px;
+            line-height: 1.8;
+        }
+
+        /* Gallery */
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-bottom: 80px;
+        }
+
+        .gallery-item {
+            background: #1a1a1a;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid #2a2a2a;
+            transition: transform 0.3s, border-color 0.3s;
+            cursor: pointer;
+        }
+
+        .gallery-item:hover {
+            transform: translateY(-5px);
+            border-color: #667eea;
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: auto;
+            display: block;
+            background: #2a2a2a;
+        }
+
+        .gallery-item-title {
+            padding: 20px;
+            font-size: 16px;
+            color: #e0e0e0;
+        }
+
+        /* Screen placeholder for images */
+        .screen-placeholder {
+            aspect-ratio: 375 / 812;
+            background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #666;
+            font-size: 14px;
+            position: relative;
+        }
+
+        .screen-placeholder::before {
+            content: '';
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 6px;
+            background: #333;
+            border-radius: 3px;
+        }
+
+        /* Project Details */
+        .project-details {
+            background: #1a1a1a;
+            border: 1px solid #2a2a2a;
+            border-radius: 12px;
+            padding: 40px;
+            margin-bottom: 60px;
+        }
+
+        .project-details h2 {
+            font-size: 24px;
+            margin-bottom: 20px;
+            color: #fff;
+        }
+
+        .project-details p {
+            color: #b0b0b0;
+            margin-bottom: 15px;
+        }
+
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .feature-item {
+            padding: 20px;
+            background: rgba(102, 126, 234, 0.05);
+            border-radius: 8px;
+            border-left: 3px solid #667eea;
+        }
+
+        .feature-item h3 {
+            font-size: 16px;
+            margin-bottom: 8px;
+            color: #fff;
+        }
+
+        .feature-item p {
+            font-size: 14px;
+            color: #888;
+            margin: 0;
+        }
+
+        /* Modal for full-size images */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            max-width: 90%;
+            max-height: 90vh;
+            object-fit: contain;
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            color: #fff;
+            font-size: 40px;
+            font-weight: 300;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+
+        .close-modal:hover {
+            color: #667eea;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 32px;
+            }
+
+            .gallery {
+                grid-template-columns: 1fr;
+            }
+
+            .project-details {
+                padding: 25px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <a href="portfolio.html#figma" class="back-link">← Back to Portfolio</a>
+            <h1>Destin</h1>
+            <div class="project-meta">
+                <span class="tag">Mobile App</span>
+                <span class="tag">iOS Design</span>
+                <span class="tag">UI/UX</span>
+                <span class="tag">Figma</span>
+            </div>
+            <p class="description">
+                A location-based social app for sharing and discovering authentic place recommendations from friends. 
+                Destin combines visual reviews with personal ratings to help users find the best spots recommended by people they trust.
+            </p>
+        </header>
+
+        <section class="project-details">
+            <h2>About the Project</h2>
+            <p>
+                Destin reimagines how we discover and share places. Instead of relying on anonymous reviews, 
+                users see recommendations from their social circle with authentic photos and personal ratings.
+            </p>
+            
+            <div class="features">
+                <div class="feature-item">
+                    <h3>📍 Visual Reviews</h3>
+                    <p>Photo-first approach with location-tagged content</p>
+                </div>
+                <div class="feature-item">
+                    <h3>⭐ Rating System</h3>
+                    <p>Color-coded ratings (8.5+ green, 6-8 yellow) for quick reference</p>
+                </div>
+                <div class="feature-item">
+                    <h3>👥 Friend-Based</h3>
+                    <p>See what your friends recommend and save their picks</p>
+                </div>
+                <div class="feature-item">
+                    <h3>📱 Clean Interface</h3>
+                    <p>Minimalist design focusing on content and usability</p>
+                </div>
+            </div>
+        </section>
+
+        <h2 style="margin-bottom: 30px; font-size: 28px;">Design Screens</h2>
+        
+        <div class="gallery">
+            <!-- Profile Screen -->
+            <div class="gallery-item" onclick="openModal(this)">
+                <img src="images/profile-with-reviews.png" alt="Profile Screen" style="width: 100%; display: block;">
+                <div class="gallery-item-title">Profile - My Reviews</div>
+            </div>
+
+            <!-- Map View -->
+            <div class="gallery-item" onclick="openModal(this)">
+                <img src="images/map-view-1.png" alt="Map View" style="width: 100%; display: block;">
+                <div class="gallery-item-title">Map View</div>
+            </div>
+
+            <!-- Place Detail -->
+            <div class="gallery-item" onclick="openModal(this)">
+                <img src="images/place-detail-with-reviews.png" alt="Place Detail" style="width: 100%; display: block;">
+                <div class="gallery-item-title">Place Detail with Reviews</div>
+            </div>
+
+            <!-- New Review -->
+            <div class="gallery-item" onclick="openModal(this)">
+                <img src="images/new-review-yosemite-4.png" alt="Add Review" style="width: 100%; display: block;">
+                <div class="gallery-item-title">New Review Flow</div>
+            </div>
+
+            <!-- Feed View -->
+            <div class="gallery-item" onclick="openModal(this)">
+                <img src="images/feed-view-1.png" alt="Feed" style="width: 100%; display: block;">
+                <div class="gallery-item-title">Feed View</div>
+            </div>
+
+            <!-- Profile Saved Tab -->
+            <div class="gallery-item" onclick="openModal(this)">
+                <img src="images/profile-saved-tab.png" alt="Saved Places" style="width: 100%; display: block;">
+                <div class="gallery-item-title">Saved Places</div>
+            </div>
+
+            <!-- Vibe Tags -->
+            <div class="gallery-item" onclick="openModal(this)">
+                <img src="images/new-review-vibe-tags.png" alt="Vibe Tags" style="width: 100%; display: block;">
+                <div class="gallery-item-title">Vibe Check Tags</div>
+            </div>
+
+            <!-- Sign Up -->
+            <div class="gallery-item" onclick="openModal(this)">
+                <img src="images/sign-up.png" alt="Sign Up" style="width: 100%; display: block;">
+                <div class="gallery-item-title">Sign Up Screen</div>
+            </div>
+
+            <!-- Friend Profile -->
+            <div class="gallery-item" onclick="openModal(this)">
+                <img src="images/friend-profile-saved.png" alt="Friend Profile" style="width: 100%; display: block;">
+                <div class="gallery-item-title">Friend Profile</div>
+            </div>
+        </div>
+
+        <!-- Design System Section -->
+        <section class="project-details" style="margin-top: 60px;">
+            <h2>Design System</h2>
+            <p><strong>Color Palette:</strong></p>
+            <div style="display: flex; gap: 15px; margin: 20px 0; flex-wrap: wrap;">
+                <div style="width: 100px; height: 100px; background: #D4EEB9; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 12px; color: #629431;">#D4EEB9<br>High Rating</div>
+                <div style="width: 100px; height: 100px; background: #EFEFB9; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 12px; color: #ECBB00;">#EFEFB9<br>Mid Rating</div>
+                <div style="width: 100px; height: 100px; background: #F6F6F6; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 12px; color: #000;">#F6F6F6<br>Navbar</div>
+            </div>
+            
+            <p><strong>Typography:</strong></p>
+            <p>Primary Font: Inter<br>
+            Weights: Regular (400), Bold (700)<br>
+            Font Size: 15px base, 18px headers</p>
+            
+            <p><strong>Layout:</strong></p>
+            <p>Mobile-first design at 375x812px (iPhone)<br>
+            Grid-based photo layout with 2 columns<br>
+            5px border radius for images and cards</p>
+        </section>
+    </div>
+
+    <!-- Modal for full-size images -->
+    <div class="modal" id="imageModal" onclick="closeModal()">
+        <span class="close-modal">&times;</span>
+        <img class="modal-content" id="modalImage">
+    </div>
+
+    <script>
+        function openModal(element) {
+            const img = element.querySelector('img');
+            if (img && img.style.display !== 'none') {
+                const modal = document.getElementById('imageModal');
+                const modalImg = document.getElementById('modalImage');
+                modal.classList.add('active');
+                modalImg.src = img.src;
+            }
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('imageModal');
+            modal.classList.remove('active');
+        }
+
+        // Close modal with Escape key
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                closeModal();
+            }
+        });
+    </script>
+</body>
+</html>
